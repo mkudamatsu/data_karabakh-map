@@ -19,11 +19,11 @@ def main():
   try:
     # Input
     rgb_raster = "Map_Artsakh_(NKR)_en_equidistant_conic_395_400_cm440.tiff"
-    rgb_value_for_border = [171, 52, 69]
+    rgb_value_for_territory = [235, 189, 151]
     # Output
-    border_raster = "karabakh-border.tif"
+    territory_raster = "karabakh-territory.tif"
     # Process
-    extract_border(rgb_raster, border_raster, rgb_value_for_border)
+    extract_territory(rgb_raster, territory_raster, rgb_value_for_territory)
 
     print "All done."
 
@@ -31,7 +31,7 @@ def main():
     print arcpy.GetMessages()
 
 # subfunctions
-def extract_border(in_rgb_raster, out_indicator_raster, rgb_value_list):
+def extract_territory(in_rgb_raster, out_indicator_raster, rgb_value_list):
   print "Deleting the output if it exists"
   delete_if_exists(out_indicator_raster)
   print "Extracting red values"
@@ -44,20 +44,20 @@ def extract_border(in_rgb_raster, out_indicator_raster, rgb_value_list):
   blue_raster = "blue.tif"
   rgb_to_color(in_rgb_raster, blue_raster, "blue")
 
-  print "Extracting the border's red value locations"
-  red_value_for_border = "VALUE = " + str(rgb_value_list[0])
-  red_object = Con(Raster(red_raster), 1, 0, red_value_for_border)
-  print "Extracting the border's green value locations"
-  green_value_for_border = "VALUE = " + str(rgb_value_list[1])
-  green_object = Con(Raster(green_raster), 1, 0, green_value_for_border)
-  print "Extracting the border's blue value locations"
-  blue_value_for_border = "VALUE = " + str(rgb_value_list[2])
-  blue_object = Con(Raster(blue_raster), 1, 0, blue_value_for_border)
+  print "Extracting the territory's red value locations"
+  red_value_for_territory = "VALUE = " + str(rgb_value_list[0])
+  red_object = Con(Raster(red_raster), 1, 0, red_value_for_territory)
+  print "Extracting the territory's green value locations"
+  green_value_for_territory = "VALUE = " + str(rgb_value_list[1])
+  green_object = Con(Raster(green_raster), 1, 0, green_value_for_territory)
+  print "Extracting the territory's blue value locations"
+  blue_value_for_territory = "VALUE = " + str(rgb_value_list[2])
+  blue_object = Con(Raster(blue_raster), 1, 0, blue_value_for_territory)
 
-  print "Extracting the border"
-  border_raster_object = red_object * green_object * blue_object
+  print "Extracting the territory"
+  territory_raster_object = red_object * green_object * blue_object
   print "Saving the raster object"
-  border_raster_object.save(out_indicator_raster)
+  territory_raster_object.save(out_indicator_raster)
 
   print "Deleting intermediate files"
   file_list = [red_raster, green_raster, blue_raster]
