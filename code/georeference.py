@@ -41,13 +41,12 @@ def main():
     print "Outputs being set..."
     output_points = "georeference_control_points.shp"
     output_fishnet = "georeference_fishnet.shp"
-    output_gadm = "georeference_gadm.shp"
     output_acasian = "georeference_acasian.shp"
 
     print "Processing..."
     create_control_points(control_points, output_points, lon, lat, wgs1984, lambert)
     create_grid(output_fishnet, wgs1984, lambert)
-    define_and_project4karabakh(acasian, output_acasian, wgs1984, lambert)
+    create_national_border(acasian, output_acasian, wgs1984, lambert)
     print "All done."
 
   except:
@@ -80,16 +79,16 @@ def create_grid(out_shp, datum, projection):
   print "...Deleting intermediate files"
   arcpy.Delete_management(fishnet_shp)
 
-def define_and_project4karabakh(in_shp, out_shp, datum, projection):
-  print "...Copying the input file"
-  copy_shp = "copy.shp"
-  arcpy.CopyFeatures_management(in_shp, copy_shp)
+def create_national_border(in_shp, out_shp, datum, projection):
+  print "...Converting polygons into lines"
+  temp_shp = "temp.shp"
+  arcpy.PolygonToLine_management(in_shp, temp_shp)
   print "...Defining datum"
-  arcpy.DefineProjection_management(copy_shp, datum)
+  arcpy.DefineProjection_management(temp_shp, datum)
   print "...Projecting"
-  project4karabakh(copy_shp, out_shp, projection)
+  project4karabakh(temp_shp, out_shp, projection)
   print "...Deleting intermediate files"
-  arcpy.Delete_management(copy_shp)
+  arcpy.Delete_management(temp_shp)
 
 def project4karabakh(in_shp, out_shp, projection):
   print "...Deleting the output if it exists"

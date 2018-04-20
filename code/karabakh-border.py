@@ -6,6 +6,9 @@ os.chdir(work_dir)
 print "Launching ArcGIS"
 import arcpy
 
+print "Importing the regular expression module" # For custumizing spatial reference. See https://arcpy.wordpress.com/2013/06/21/altering-spatial-references-in-python/
+import re
+
 print "Enabling the Spatial Analyst extension"
 from arcpy.sa import *
 arcpy.CheckOutExtension("Spatial")
@@ -18,12 +21,22 @@ arcpy.env.workspace = "../temp/" # NEVER USE single backslash (\). # Set the wor
 def main():
   try:
     # Input
-    rgb_raster = "Map_Artsakh_(NKR)_en_equidistant_conic_395_400_cm440.tiff"
-    rgb_value_for_border = [171, 52, 69]
+    rgb_raster = "karabakh_map_georeferenced.tif"
+    rgb_value_for_border = [203, 65, 80]
+    # Lambert Conformal Conic projection paramters used by C.I.A for the map of Armenia: see https://legacy.lib.utexas.edu/maps/armenia.html and https://legacy.lib.utexas.edu/maps/commonwealth/armenia_rel-2002.pdf
+    lambert = arcpy.SpatialReference(102014) # see page 18 of http://desktop.arcgis.com/en/arcmap/10.3/analyze/arcpy-classes/pdf/projected_coordinate_systems.pdf
+    print "Changing parameters 1/3"
+    lambert.loadFromString(re.sub('PARAMETER\[\'Central_Meridian\'\,.+?]', 'PARAMETER\[\'Central_Meridian\',45.0]', lambert.exportToString()))
+    print "Changing parameters 2/3"
+    lambert.loadFromString(re.sub('PARAMETER\[\'Standard_Parallel_1\'\,.+?]', 'PARAMETER\[\'Standard_Parallel_1\',39.0]', lambert.exportToString()))
+    print "Changing parameters 3/3"
+    lambert.loadFromString(re.sub('PARAMETER\[\'Standard_Parallel_2\'\,.+?]', 'PARAMETER\[\'Standard_Parallel_2\',41.0]', lambert.exportToString()))
     # Output
     border_raster = "karabakh-border.tif"
     # Process
     extract_border(rgb_raster, border_raster, rgb_value_for_border)
+    print "...Defining projection"
+    arcpy.DefineProjection_management(border_raster, lambert)
 
     print "All done."
 
