@@ -14,3 +14,4 @@
 *.spx filter=lfs diff=lfs merge=lfs -text
 orig/AZE_adm.gdb/* filter=lfs diff=lfs merge=lfs -text
 *.csv filter=lfs diff=lfs merge=lfs -text
+*.mxd filter=lfs diff=lfs merge=lfs -text
