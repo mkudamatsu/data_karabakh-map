@@ -32,8 +32,8 @@ def main():
     print "Changing parameters 3/3"
     lambert.loadFromString(re.sub('PARAMETER\[\'Standard_Parallel_2\'\,.+?]', 'PARAMETER\[\'Standard_Parallel_2\',41.0]', lambert.exportToString()))
     # Azerbaijan rayon polygons
-    gadm = "../orig/AZE_adm.gdb/AZE_adm2"           # coordinate system already defined as WGS 1984
-    acasian = "../orig/Acasian/azerbaijan_adm2.shp" # coordinate system undefined
+    gadm = "../orig/AZE_adm.gdb/AZE_adm1"           # coordinate system already defined as WGS 1984
+    acasian = "../orig/Acasian/azerbaijan_adm1-1.shp" # coordinate system undefined
     # Control points for geo-referencing
     control_points = "../orig/control_points.csv"
     lon = "lon"
