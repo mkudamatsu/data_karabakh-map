@@ -32,7 +32,6 @@ def main():
     print "Changing parameters 3/3"
     lambert.loadFromString(re.sub('PARAMETER\[\'Standard_Parallel_2\'\,.+?]', 'PARAMETER\[\'Standard_Parallel_2\',41.0]', lambert.exportToString()))
     # Azerbaijan rayon polygons
-    gadm = "../orig/AZE_adm.gdb/AZE_adm1"           # coordinate system already defined as WGS 1984
     acasian = "../orig/Acasian/azerbaijan_adm1-1.shp" # coordinate system undefined
     # Control points for geo-referencing
     control_points = "../orig/control_points.csv"
@@ -48,7 +47,6 @@ def main():
     print "Processing..."
     create_control_points(control_points, output_points, lon, lat, wgs1984, lambert)
     create_grid(output_fishnet, wgs1984, lambert)
-    project4karabakh(gadm, output_gadm, lambert)
     define_and_project4karabakh(acasian, output_acasian, wgs1984, lambert)
     print "All done."
 
