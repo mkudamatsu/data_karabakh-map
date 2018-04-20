@@ -21,8 +21,8 @@ arcpy.env.workspace = "../temp/" # NEVER USE single backslash (\). # Set the wor
 def main():
   try:
     # Input
-    rgb_raster = "Map_Artsakh_(NKR)_en_equidistant_conic_395_400_cm440.tiff"
-    rgb_value_for_border = [171, 52, 69]
+    rgb_raster = "karabakh_map_georeferenced.tif"
+    rgb_value_for_border = [203, 65, 80]
     # Lambert Conformal Conic projection paramters used by C.I.A for the map of Armenia: see https://legacy.lib.utexas.edu/maps/armenia.html and https://legacy.lib.utexas.edu/maps/commonwealth/armenia_rel-2002.pdf
     lambert = arcpy.SpatialReference(102014) # see page 18 of http://desktop.arcgis.com/en/arcmap/10.3/analyze/arcpy-classes/pdf/projected_coordinate_systems.pdf
     print "Changing parameters 1/3"
