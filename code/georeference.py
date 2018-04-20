@@ -34,13 +34,19 @@ def main():
     # Azerbaijan rayon polygons
     gadm = "../orig/AZE_adm.gdb/AZE_adm2"           # coordinate system already defined as WGS 1984
     acasian = "../orig/Acasian/azerbaijan_adm2.shp" # coordinate system undefined
+    # Control points for geo-referencing
+    control_points = "../orig/control_points.csv"
+    lon = "lon"
+    lat = "lat"
 
     print "Outputs being set..."
+    output_points = "georeference_control_points.shp"
     output_fishnet = "georeference_fishnet.shp"
     output_gadm = "georeference_gadm.shp"
     output_acasian = "georeference_acasian.shp"
 
     print "Processing..."
+    create_control_points(control_points, output_points, lon, lat, wgs1984, lambert)
     create_grid(output_fishnet, wgs1984, lambert)
     project4karabakh(gadm, output_gadm, lambert)
     define_and_project4karabakh(acasian, output_acasian, wgs1984, lambert)
@@ -50,6 +56,18 @@ def main():
     print arcpy.GetMessages()
 
 # subfunctions
+def create_control_points(input_csv, output_shp, longitude_varname, latitude_varname, datum, projection):
+  print "...Setting intermediate files"
+  temp_shp = "temp.shp"
+  print "...Defining the datum"
+  arcpy.MakeXYEventLayer_management(input_csv, longitude_varname, latitude_varname, "Layer", datum)
+  print "...Converting into a shapefile"
+  arcpy.CopyFeatures_management("Layer", temp_shp)
+  print "...Projecting"
+  project4karabakh(temp_shp, output_shp, projection)
+  print "...Deleting intermediate files"
+  arcpy.Delete_management(temp_shp)
+
 def create_grid(out_shp, datum, projection):
   print "...Deleting the output if it exists"
   delete_if_exists(out_shp)
